@@ -1,34 +1,16 @@
 const express = require("express");
 const songRouter = express.Router();
 const Song = require("../models/songModel");
-const {getAllSongs}=require('../Controllers/songsController')
-// const getSong=(req,res)=>{
-//     console.log(req.params)
-//     const id=req.params.id*1;
-//     const song=tourRouter.find
-// }
-// const createAllSongs=(req,res)=>{
-//     res.status(204).json({
-//         status:'error',
-//         message:'this route is not implemented yet'
-//     })
-// }
-// const updateSongs=(req,res)=>{
-//     res.status(204).json({
-//         status:'error',
-//         message:'this route is not implemented yet'
-//     })
-// }
-// const deleteSong=(req,res)=>{
-//     res.status(204).json({
-//         status:'error',
-//         message:'this route is not implemented yet'
-//     })
-// }
+const {getAllSongs,createSong,getSong,updateSong,deleteSong,getSongbyGenere,getSongbyArtist,getSongbyAlbum}=require('../Controllers/songsController')
 
-// Song Routes 
-songRouter.route("/").get(getAllSongs);
-// songRouter.route("/:id").get(getSong).patch(updateSongs).delete(deleteSong);
+songRouter.route("/").get(getAllSongs).post(createSong);
+
+songRouter.route("/:id").get(getSong).patch(updateSong).delete(deleteSong);
+songRouter.route("/Genere/:genere").get(getSongbyGenere);
+songRouter.route("/Artist/:artist").get(getSongbyArtist);
+songRouter.route("/Album/:album").get(getSongbyAlbum);
+
+
 
 
 module.exports=songRouter;

@@ -2,9 +2,9 @@ const mongose = require("mongoose");
 
 const songSchema = new mongose.Schema({
     Title: {
+      unique: true,
       type: String,
       require: [true, "Title is required Feilds"],
-      unique: true,
     },
     Album: {
       type: String,
