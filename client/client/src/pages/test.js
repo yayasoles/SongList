@@ -1,25 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  AppShell,
-  Navbar,
-  Header,
-  Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
-  rem,
   createStyles,
+  Navbar,
+  TextInput,
+  Code,
   UnstyledButton,
   Badge,
-  Tooltip,
+  Text,
   Group,
   ActionIcon,
+  Tooltip,
+  rem,
   Button,
+  Collapse,
+  Skeleton,
 } from "@mantine/core";
-import { IconBulb, IconCheckbox, IconUser } from "@tabler/icons-react";
-import Collapsable from "./pages/forms";
+import {
+  IconBulb,
+  IconUser,
+  IconCheckbox,
+  IconSearch,
+  IconPlus,
+  IconSelector,
+} from "@tabler/icons-react";
+import Demo from "./pages/forms";
+// import { UserButton } from '../UserButton/UserButton';
+
+// states
+
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
@@ -134,24 +142,35 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }));
+
+const child = <Skeleton height={140} radius="md" animate={false} />;
 const albumCount = 4;
-const links = [
-  { icon: IconBulb, label: "Artist", notifications: albumCount },
-  { icon: IconCheckbox, label: "Genere", notifications: albumCount },
-  { icon: IconUser, label: "Album", notifications: albumCount },
+
+
+let songs = [
+  { emoji: "🎶", label: "Sales" },
+  { emoji: "🎶", label: "Deliveries" },
+  { emoji: "🎶", label: "Discounts" },
+  { emoji: "🎶", label: "Profits" },
+  { emoji: "🎶", label: "Reports" },
+  { emoji: "🎶", label: "Orders" },
+  { emoji: "🎶", label: "Events" },
+  { emoji: "🎶", label: "Debts" },
+  { emoji: "🎶", label: "Customers" },
 ];
-
-
-export default function AppShellDemo() {
-  const groupByClicked = (event) => {
-    // console.log(event.target.innerText)
-    setIsGroupedByClicked(event.target.innerText)
-  };
+const groupClicked = (event) => {
+  console.log(event.target.outerText);
+};
+export default function NavbarSearch() {
+  const links = [
+    { icon: IconBulb, label: "Artist", notifications: albumCount },
+    { icon: IconCheckbox, label: "Genere", notifications: albumCount },
+    { icon: IconUser, label: "Album", notifications: albumCount },
+  ];
+  //States
   const [generes, setgeneres] = useState(0);
   const [artist, setartist] = useState(0);
   const [album, setalbum] = useState([]);
-  const [IsGroupedByClicked, setIsGroupedByClicked] = useState(false);
-  // console.log('IsGroupedByClickedIsGroupedByClickedIsGroupedByClicked',IsGroupedByClicked)
   const [allSongs, setallSongs] = useState([]);
   let AllSongs = [];
   for (let index = 0; index < allSongs.length; index++) {
@@ -162,31 +181,21 @@ export default function AppShellDemo() {
     });
   }
   const x = 10;
-
+  // Use Effects
   useEffect(() => {
     fetch("http://localhost:3001/api/v1/songs/Album/Kena Leb")
       .then((response) => response.json())
       .then((data) => {
         setalbum(data.data);
-        // console.log(data.data);
-        // console.log(album.length);
+        console.log(data.data);
+        console.log(album.length);
       });
     fetch("http://localhost:3001/api/v1/songs")
       .then((response) => response.json())
       .then((data) => {
         setallSongs(data.data);
       });
-  }, []);
-  useEffect(() => {
-    // if (IsGroupedByClicked === true) {
-      fetch("http://localhost:3001/api/v1/songs")
-        .then((response) => response.json())
-        .then((data) => {
-          setallSongs(data.data);
-        });
-    // }
-  }, []);
-
+  }, [x]);
   let artists = allSongs.map((song) => song.Artist);
   artists = [...new Set(artists)];
   let albums = allSongs.map((song) => song.Album);
@@ -195,24 +204,15 @@ export default function AppShellDemo() {
   genere = [...new Set(genere)];
 
   const songbyartist = allSongs.filter((song) => song.Artist !== undefined);
-  let artistsOnly = songbyartist.map((song) => song.Artist);
-  artistsOnly = [...new Set(artistsOnly)];
-
+  songbyartist=[...new Set(songbyartist.Artist)]
+  console.log(songbyartist)
   const songbyalbum = allSongs.filter((song) => song.Album !== undefined);
-  let albumsOnly = songbyalbum.map((song) => song.Album);
-  albumsOnly = [...new Set(albumsOnly)];
-  // console.log('albumsOnlyalbumsOnlyalbumsOnlyalbumsOnlyalbumsOnlyalbumsOnly : ',albumsOnly)
-
   const songbygenere = allSongs.filter((song) => song.Genere !== undefined);
-  let generesOnly = songbyalbum.map((song) => song.Genere);
-  generesOnly = [...new Set(generesOnly)];
-
-  // console.log(artistsOnly, albumsOnly, generesOnly);
 
   const { classes } = useStyles();
   const mainLinks = links.map((link) => (
     <UnstyledButton
-      onClick={(event)=>groupByClicked(event)}
+      onClick={groupClicked}
       key={link.Title}
       className={classes.mainLink}
       href="google.com"
@@ -249,87 +249,34 @@ export default function AppShellDemo() {
       ))
     : "";
 
-  const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
-
   return (
-    <AppShell
-      styles={{
-        main: {
-          background:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        },
-      }}
-      navbarOffsetBreakpoint="sm"
-      asideOffsetBreakpoint="sm"
-      navbar={
+    <>
+      <div>
         <Navbar
+          height={700}
+          width={{ sm: 300 }}
           p="md"
-          hiddenBreakpoint="sm"
-          hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
+          className={classes.navbar}
         >
-          <Text>Application navbar</Text>
+          <Navbar.Section className={classes.section}>
+            <div className={classes.mainLinks}>{mainLinks}</div>
+          </Navbar.Section>
+
+          <Navbar.Section className={classes.section}>
+            <Group className={classes.collectionsHeader} position="apart">
+              <Text size="xs" weight={500} color="dimmed">
+                Songs : {allSongs.length}
+              </Text>
+              <Tooltip label="Create New Song" withArrow position="right">
+                <ActionIcon variant="default" size={18}>
+                  <Button size="0.8rem">New</Button>
+                </ActionIcon>
+              </Tooltip>
+            </Group>
+            <div className={classes.collections}>{collectionLinks}</div>
+          </Navbar.Section>
         </Navbar>
-      }
-      aside={
-        <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-          <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-            <Navbar
-              height={700}
-              width={{ sm: 300 }}
-              p="md"
-              className={classes.navbar}
-            >
-              <Navbar.Section className={classes.section}>
-                <div className={classes.mainLinks}>{mainLinks}</div>
-              </Navbar.Section>
-
-              <Navbar.Section className={classes.section}>
-                <Group className={classes.collectionsHeader} position="apart">
-                  <Text size="xs" weight={500} color="dimmed">
-                    Songs : {allSongs.length}
-                  </Text>
-                  <Tooltip label="Create New Song" withArrow position="right">
-                    <ActionIcon variant="default" size={18}>
-                      <Button  onClick={(event)=>groupByClicked(event)} size="0.8rem">New</Button>
-                    </ActionIcon>
-                  </Tooltip>
-                </Group>
-                <div className={classes.collections}>{collectionLinks}</div>
-              </Navbar.Section>
-            </Navbar>
-          </Aside>
-        </MediaQuery>
-      }
-      footer={
-        <Footer height={60} p="md">
-          Application footer
-        </Footer>
-      }
-      header={
-        <Header height={{ base: 50, md: 70 }} p="md">
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
-
-            <Text>Application header</Text>
-          </div>
-        </Header>
-      }
-    >
-    <Collapsable IsGroupedByClicked={IsGroupedByClicked} groupBy={[songbyartist,songbyalbum,songbygenere]}></Collapsable>
-    </AppShell>
+      </div>
+    </>
   );
 }
