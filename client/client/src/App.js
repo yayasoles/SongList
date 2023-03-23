@@ -17,6 +17,7 @@ import {
   Group,
   ActionIcon,
   Button,
+  ScrollArea,
 } from "@mantine/core";
 import { IconBulb, IconCheckbox, IconUser } from "@tabler/icons-react";
 import Collapsable from "./pages/forms";
@@ -145,7 +146,7 @@ const links = [
 export default function AppShellDemo() {
   const [IsGroupedByClicked, setIsGroupedByClicked] = useState(false);
   const [songData, setsongData] = useState();
-   const [clickedSong, setclickedSong] = useState('')
+  const [clickedSong, setclickedSong] = useState("");
   const groupByClicked = (event) => {
     event.preventDefault();
     setIsGroupedByClicked(event.target.innerText);
@@ -153,35 +154,35 @@ export default function AppShellDemo() {
   };
 
   const songClickedHandler = (event) => {
-    let title='';
-    let artist='';
+    let title = "";
+    let artist = "";
     event.preventDefault();
     // if(clickedSong===''){
-      let data=event.target.innerText;
-       data=data.split('by')
-       title=data[0]?.replace("🎶", "").trim()
-       artist=data[1]?.trim()
-       setclickedSong({title:title,artist:artist})
-       alert(title+'by'+artist)
-      alert(clickedSong)
+    setIsGroupedByClicked(event.target.innerText);
+    let data = event.target.innerText;
+    data = data.split("by");
+    title = data[0]?.replace("🎶", "").trim();
+    artist = data[1]?.trim();
+    setclickedSong({ title: title, artist: artist });
+    //  alert(title+'by'+artist)
+    // alert(clickedSong)
     // }else{
     //   alert(clickedSong)
     // }
-//     let songclick=clickedSong?.split('by')
-//     const artist=songclick[1].trim()
-//     songclick=songclick[0].split(' ')
-// console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj : ',songclick)
-//     const title=songclick.trim()
-//     // console.log('Title= :',title," Artist : ",artist)
-//     setclickedSong(event.target.innerText);
+    //     let songclick=clickedSong?.split('by')
+    //     const artist=songclick[1].trim()
+    //     songclick=songclick[0].split(' ')
+    // console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj : ',songclick)
+    //     const title=songclick.trim()
+    //     // console.log('Title= :',title," Artist : ",artist)
+    //     setclickedSong(event.target.innerText);
   };
 
   useEffect(() => {
-    alert(clickedSong)
-    console.log('ffffffffffffffffffffffffffffffffffff ',clickedSong)
+    console.log("ffffffffffffffffffffffffffffffffffff ", clickedSong);
     if (clickedSong !== "") {
-      const param=clickedSong.title+'by'+clickedSong.artist
-      console.log('param ',param);
+      const param = clickedSong.title + "by" + clickedSong.artist;
+      console.log("param ", param);
       fetch(`http://localhost:3001/api/v1/songs/byTitle/${param}`)
         .then((response) => response.json())
         .then((data) => {
@@ -334,7 +335,12 @@ export default function AppShellDemo() {
                     </ActionIcon>
                   </Tooltip>
                 </Group>
-                <div className={classes.collections}>{collectionLinks}</div>
+                  
+
+                  <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+                    {collectionLinks}
+                  </Navbar.Section>
+                {/* <div className={classes.collections}>{collectionLinks}</div> */}
               </Navbar.Section>
             </Navbar>
           </Aside>
@@ -369,6 +375,7 @@ export default function AppShellDemo() {
         IsGroupedByClicked={IsGroupedByClicked}
         groupBy={[songbyartist, songbyalbum, songbygenere]}
         songData={clickedSong}
+        songdata={songData}
       ></Collapsable>
     </AppShell>
   );

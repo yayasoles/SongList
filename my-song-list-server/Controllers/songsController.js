@@ -56,6 +56,7 @@ exports.getOneSong = async (req, res) => {
       });
   }
 };
+1000256052807
 exports.createSong = async (req, res) => {
   try {
     const newSong = await songModel.create(req.body);
@@ -85,7 +86,7 @@ exports.updateSong = async (req, res) => {
             });
         res.status(200).json({
           status: "Success",
-          message: "Fetch Completed",
+          message: "Creation Completed ",
           data: result,
         });
     } catch (error) {
