@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Collapse, Layout } from "antd";
 import CollapsePanel from "antd/es/collapse/CollapsePanel";
-
+const SideBarCard = 'SideBarCard';
 const { Panel } = Collapse;
 const { Content, Footer, Header, Sider } = Layout;
 
@@ -21,6 +21,9 @@ function Home() {
     <div className="App">
       <Header>this is Header</Header>
       <Sider>
+        {/* <SideBarCard>
+
+        </SideBarCard> */}
         <ul>
           <li>List 1</li>
           <li>List 2</li>

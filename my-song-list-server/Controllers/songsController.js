@@ -33,6 +33,29 @@ exports.getSong = async (req, res) => {
       });
   }
 };
+exports.getOneSong = async (req, res) => {
+  try {
+    console.log('Before Spliting',req.params.title.artist)
+    const d=req.params.title.split('by')
+    
+    const title=d[0].trim()
+    console.log(title)
+    const artist=d[1].trim()
+    console.log(title+artist)
+    const result = await songModel.find({ Title: title, Artist: artist });
+    console.log(title,artist,result)
+    res.status(200).json({
+      status: "Success",
+      message: "Fetch Completed",
+      data: result[0],
+    });
+  } catch (error) {
+    res.status(400).json({
+        status: "Failed",
+        message: error,
+      });
+  }
+};
 exports.createSong = async (req, res) => {
   try {
     const newSong = await songModel.create(req.body);

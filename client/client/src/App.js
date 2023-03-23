@@ -134,6 +134,7 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }));
+
 const albumCount = 4;
 const links = [
   { icon: IconBulb, label: "Artist", notifications: albumCount },
@@ -141,18 +142,62 @@ const links = [
   { icon: IconUser, label: "Album", notifications: albumCount },
 ];
 
-
 export default function AppShellDemo() {
+  const [IsGroupedByClicked, setIsGroupedByClicked] = useState(false);
+  const [songData, setsongData] = useState();
+   const [clickedSong, setclickedSong] = useState('')
   const groupByClicked = (event) => {
-    // console.log(event.target.innerText)
-    setIsGroupedByClicked(event.target.innerText)
+    event.preventDefault();
+    setIsGroupedByClicked(event.target.innerText);
+    setsongData(1);
   };
-  const [generes, setgeneres] = useState(0);
+
+  const songClickedHandler = (event) => {
+    let title='';
+    let artist='';
+    event.preventDefault();
+    // if(clickedSong===''){
+      let data=event.target.innerText;
+       data=data.split('by')
+       title=data[0]?.replace("🎶", "").trim()
+       artist=data[1]?.trim()
+       setclickedSong({title:title,artist:artist})
+       alert(title+'by'+artist)
+      alert(clickedSong)
+    // }else{
+    //   alert(clickedSong)
+    // }
+//     let songclick=clickedSong?.split('by')
+//     const artist=songclick[1].trim()
+//     songclick=songclick[0].split(' ')
+// console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj : ',songclick)
+//     const title=songclick.trim()
+//     // console.log('Title= :',title," Artist : ",artist)
+//     setclickedSong(event.target.innerText);
+  };
+
+  useEffect(() => {
+    alert(clickedSong)
+    console.log('ffffffffffffffffffffffffffffffffffff ',clickedSong)
+    if (clickedSong !== "") {
+      const param=clickedSong.title+'by'+clickedSong.artist
+      console.log('param ',param);
+      fetch(`http://localhost:3001/api/v1/songs/byTitle/${param}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("response response", data.data);
+          setsongData(data.data);
+        });
+    }
+  }, [clickedSong]);
+  // const [generes, setgeneres] = useState(0);
   const [artist, setartist] = useState(0);
   const [album, setalbum] = useState([]);
-  const [IsGroupedByClicked, setIsGroupedByClicked] = useState(false);
+  // const [song, setsong] = useState();
+
   // console.log('IsGroupedByClickedIsGroupedByClickedIsGroupedByClicked',IsGroupedByClicked)
   const [allSongs, setallSongs] = useState([]);
+
   let AllSongs = [];
   for (let index = 0; index < allSongs.length; index++) {
     AllSongs.push({
@@ -164,34 +209,20 @@ export default function AppShellDemo() {
   const x = 10;
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/v1/songs/Album/Kena Leb")
-      .then((response) => response.json())
-      .then((data) => {
-        setalbum(data.data);
-        // console.log(data.data);
-        // console.log(album.length);
-      });
     fetch("http://localhost:3001/api/v1/songs")
       .then((response) => response.json())
       .then((data) => {
         setallSongs(data.data);
       });
   }, []);
-  useEffect(() => {
-    // if (IsGroupedByClicked === true) {
-      fetch("http://localhost:3001/api/v1/songs")
-        .then((response) => response.json())
-        .then((data) => {
-          setallSongs(data.data);
-        });
-    // }
-  }, []);
 
-  let artists = allSongs.map((song) => song.Artist);
+  let artists = allSongs?.map((song) => song.Artist);
   artists = [...new Set(artists)];
-  let albums = allSongs.map((song) => song.Album);
+  // setartist(artists)
+
+  let albums = allSongs?.map((song) => song.Album);
   albums = [...new Set(albums)];
-  let genere = allSongs.map((song) => song.Genere);
+  let genere = allSongs?.map((song) => song.Genere);
   genere = [...new Set(genere)];
 
   const songbyartist = allSongs.filter((song) => song.Artist !== undefined);
@@ -212,7 +243,7 @@ export default function AppShellDemo() {
   const { classes } = useStyles();
   const mainLinks = links.map((link) => (
     <UnstyledButton
-      onClick={(event)=>groupByClicked(event)}
+      onClick={(event) => groupByClicked(event)}
       key={link.Title}
       className={classes.mainLink}
       href="google.com"
@@ -235,7 +266,7 @@ export default function AppShellDemo() {
     ? AllSongs.map((collection) => (
         <a
           href="/"
-          onClick={(event) => event.preventDefault()}
+          onClick={(event) => songClickedHandler(event)}
           key={collection.label}
           className={classes.collectionLink}
         >
@@ -294,7 +325,12 @@ export default function AppShellDemo() {
                   </Text>
                   <Tooltip label="Create New Song" withArrow position="right">
                     <ActionIcon variant="default" size={18}>
-                      <Button  onClick={(event)=>groupByClicked(event)} size="0.8rem">New</Button>
+                      <Button
+                        onClick={(event) => groupByClicked(event)}
+                        size="0.8rem"
+                      >
+                        New
+                      </Button>
                     </ActionIcon>
                   </Tooltip>
                 </Group>
@@ -329,7 +365,11 @@ export default function AppShellDemo() {
         </Header>
       }
     >
-    <Collapsable IsGroupedByClicked={IsGroupedByClicked} groupBy={[songbyartist,songbyalbum,songbygenere]}></Collapsable>
+      <Collapsable
+        IsGroupedByClicked={IsGroupedByClicked}
+        groupBy={[songbyartist, songbyalbum, songbygenere]}
+        songData={clickedSong}
+      ></Collapsable>
     </AppShell>
   );
 }

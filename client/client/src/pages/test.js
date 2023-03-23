@@ -205,7 +205,6 @@ export default function NavbarSearch() {
 
   const songbyartist = allSongs.filter((song) => song.Artist !== undefined);
   songbyartist=[...new Set(songbyartist.Artist)]
-  console.log(songbyartist)
   const songbyalbum = allSongs.filter((song) => song.Album !== undefined);
   const songbygenere = allSongs.filter((song) => song.Genere !== undefined);
 

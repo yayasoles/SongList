@@ -1,23 +1,25 @@
 import { TextInput, Checkbox, Button, Group, Box } from "@mantine/core";
 // import { useForm } from "@mantine/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function NewForm() {
-  useEffect(() => {}, []);
-  const { register, handleSubmit, watch,resetField, formState: { errors } } = useForm();
-//   const form = useForm({
-//     initialValues: {
-//       Title: "",
-//       Album: "",
-//       Artist: "",
-//       Genere: "",
-//     },
+export default function NewForm({IsGroupedByClicked,songdata}) {
+  console.log(songdata)
+  const { register, handleSubmit, watch,resetField,setValue, formState: { errors } } = useForm();
+// const song=IsGroupedByClicked;
+// alert(sondData)
+// alert(song)
+//  const songData= IsGroupedByClicked!=='New'?IsGroupedByClicked.split('by'):''
+//  const [updateSong, setupdateSong] = useState()
+ useEffect(() => {
+setValue("Title",songdata.title)
+setValue("Artist",songdata.artist)
+setValue("Album",songdata.title)
+setValue("Genere",songdata.genere)
 
-//     validate: {
-//       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-//     },
-//   });
+}, [songdata])
+  
+  
   const onSubmit = async (data) => {
     // data.preventDefault();
     console.log(
@@ -40,14 +42,13 @@ export default function NewForm() {
     })
       .then((response) => response.json())
       .then((data) => {
-
-        // setdatas(data.data);
         console.log(data.data);
       });
       resetField()
-    alert("added");
+      
+    alert("Sucessfully added");
+    console.log(data.data);
   };
-
   return (
     <Box maw={300} mx="auto">
       <form  onSubmit={handleSubmit(onSubmit)} preve>
@@ -56,20 +57,25 @@ export default function NewForm() {
           name="Title"
           withAsterisk
           label="Title"
+          placeholder={songdata?.Title}
         />
         <TextInput
           name="Artist"
           withAsterisk
           label="Artist"
+          value={songdata?.Artist}
+          placeholder={songdata.Artist}
           {...register("Artist", { required: true })}
         />
         <TextInput
           name="Album"
           label="Album"
+          placeholder={songdata?.Album}
           {...register("Album", { required: true })}
         />
         <TextInput
           name="Genere"
+          placeholder={songdata?.Genere}
           label="Genere"
           {...register("Genere", { required: true })}
         />
