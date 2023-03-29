@@ -136,17 +136,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const albumCount = 4;
+// const albumCount = 4;
 const links = [
-  { icon: IconBulb, label: "Artist", notifications: albumCount },
-  { icon: IconCheckbox, label: "Genere", notifications: albumCount },
-  { icon: IconUser, label: "Album", notifications: albumCount },
+  { icon: IconBulb, label: "Artist", notifications: '0' },
+  { icon: IconCheckbox, label: "Genere", notifications: '0' },
+  { icon: IconUser, label: "Album", notifications: '0' },
 ];
 
 export default function AppShellDemo() {
   const [IsGroupedByClicked, setIsGroupedByClicked] = useState(false);
   const [songData, setsongData] = useState();
   const [clickedSong, setclickedSong] = useState("");
+  const [allSongs, setallSongs] = useState([]);
   const groupByClicked = (event) => {
     event.preventDefault();
     setIsGroupedByClicked(event.target.innerText);
@@ -157,32 +158,17 @@ export default function AppShellDemo() {
     let title = "";
     let artist = "";
     event.preventDefault();
-    // if(clickedSong===''){
     setIsGroupedByClicked(event.target.innerText);
     let data = event.target.innerText;
     data = data.split("by");
     title = data[0]?.replace("🎶", "").trim();
     artist = data[1]?.trim();
     setclickedSong({ title: title, artist: artist });
-    //  alert(title+'by'+artist)
-    // alert(clickedSong)
-    // }else{
-    //   alert(clickedSong)
-    // }
-    //     let songclick=clickedSong?.split('by')
-    //     const artist=songclick[1].trim()
-    //     songclick=songclick[0].split(' ')
-    // console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj : ',songclick)
-    //     const title=songclick.trim()
-    //     // console.log('Title= :',title," Artist : ",artist)
-    //     setclickedSong(event.target.innerText);
   };
 
   useEffect(() => {
-    console.log("ffffffffffffffffffffffffffffffffffff ", clickedSong);
     if (clickedSong !== "") {
       const param = clickedSong.title + "by" + clickedSong.artist;
-      console.log("param ", param);
       fetch(`http://localhost:3001/api/v1/songs/byTitle/${param}`)
         .then((response) => response.json())
         .then((data) => {
@@ -197,14 +183,15 @@ export default function AppShellDemo() {
   // const [song, setsong] = useState();
 
   // console.log('IsGroupedByClickedIsGroupedByClickedIsGroupedByClicked',IsGroupedByClicked)
-  const [allSongs, setallSongs] = useState([]);
+  
 
   let AllSongs = [];
-  for (let index = 0; index < allSongs.length; index++) {
+  for (let index = 0; index < allSongs?.length; index++) {
     AllSongs.push({
       emoji: "🎶",
       label: allSongs[index].Title,
       name: allSongs[index].Artist,
+      id: allSongs[index]._id,
     });
   }
   const x = 10;
@@ -227,25 +214,14 @@ export default function AppShellDemo() {
   genere = [...new Set(genere)];
 
   const songbyartist = allSongs.filter((song) => song.Artist !== undefined);
-  let artistsOnly = songbyartist.map((song) => song.Artist);
-  artistsOnly = [...new Set(artistsOnly)];
-
   const songbyalbum = allSongs.filter((song) => song.Album !== undefined);
-  let albumsOnly = songbyalbum.map((song) => song.Album);
-  albumsOnly = [...new Set(albumsOnly)];
-  // console.log('albumsOnlyalbumsOnlyalbumsOnlyalbumsOnlyalbumsOnlyalbumsOnly : ',albumsOnly)
-
   const songbygenere = allSongs.filter((song) => song.Genere !== undefined);
-  let generesOnly = songbyalbum.map((song) => song.Genere);
-  generesOnly = [...new Set(generesOnly)];
-
-  // console.log(artistsOnly, albumsOnly, generesOnly);
 
   const { classes } = useStyles();
   const mainLinks = links.map((link) => (
     <UnstyledButton
       onClick={(event) => groupByClicked(event)}
-      key={link.Title}
+      key={link?.Title}
       className={classes.mainLink}
       href="google.com"
     >
@@ -255,9 +231,9 @@ export default function AppShellDemo() {
       </div>
       {link.notifications && (
         <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
-          {link.label == "Album" ? artists.length : ""}
-          {link.label == "Artist" ? albums.length : ""}
-          {link.label == "Genere" ? genere.length : ""}
+          {link.label === "Album" ? albums?.length : ""}
+          {link.label === "Artist" ? artists?.length : ""}
+          {link.label === "Genere" ? genere?.length : ""}
         </Badge>
       )}
     </UnstyledButton>
@@ -268,15 +244,15 @@ export default function AppShellDemo() {
         <a
           href="/"
           onClick={(event) => songClickedHandler(event)}
-          key={collection.label}
+          key={collection?._id}
           className={classes.collectionLink}
         >
           <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
-            {collection.emoji}
+            {collection?.emoji}
           </span>{" "}
-          {collection.label}
+          {collection?.label}
           {" by "}
-          {collection.name}
+          {collection?.name}
         </a>
       ))
     : "";
@@ -322,7 +298,7 @@ export default function AppShellDemo() {
               <Navbar.Section className={classes.section}>
                 <Group className={classes.collectionsHeader} position="apart">
                   <Text size="xs" weight={500} color="dimmed">
-                    Songs : {allSongs.length}
+                    Songs : {allSongs?.length}
                   </Text>
                   <Tooltip label="Create New Song" withArrow position="right">
                     <ActionIcon variant="default" size={18}>
@@ -374,8 +350,9 @@ export default function AppShellDemo() {
       <Collapsable
         IsGroupedByClicked={IsGroupedByClicked}
         groupBy={[songbyartist, songbyalbum, songbygenere]}
-        songData={clickedSong}
         songdata={songData}
+        allsongs={allSongs}
+        setallsongs={setallSongs}
       ></Collapsable>
     </AppShell>
   );

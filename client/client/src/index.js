@@ -1,13 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
+// import Reducer, { AddSong } from "./redux/actions";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// const redux=require('redux')
+// const createStore=redux.createStore;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+// const store=createStore(Reducer)
+// console.log('initial state',store.getState())
+// const unsubscribe=store.subscribe(()=>console.log('Updated state',store.getState()))
+// store.dispatch(AddSong('ADD_SONG',{
+//   Title: "Title",
+//   Artist: "Artist",
+//   Album: "Album",
+//   Genere: "Genere",
+// }))
 root.render(
   <React.StrictMode>
-    <App />
+    <MantineProvider>
+      <ModalsProvider labels={{ confirm: 'Delete Song', cancel: "No don't delete it" }}>
+        <App />
+      </ModalsProvider>
+    </MantineProvider>
   </React.StrictMode>
 );
 

@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 export default function CustomBox({ artist,from }) {
   const [datas, setdatas] = useState([]);
   const [opened, { toggle }] = useDisclosure(false);
-const b=10
   useEffect(() => {
     fetch(`http://localhost:3001/api/v1/songs/${from}/${artist}`)
       .then((response) => response.json())
@@ -16,12 +15,16 @@ const b=10
       });
   }, []);
   const dataList=datas.map((data)=>
-    <List.Item>{data.Title}</List.Item>
+    <List.Item key={data._id}>{data.Title}</List.Item>
   )
   return (
     <Box maw={400} mx="auto" primary>
       <Group position="left" mb={5}>
-        <Button onClick={toggle}>Song by {artist}</Button>
+        <Button onClick={toggle}>
+          {from==='Artist'?(<>Song By {artist}</>):
+          from==='Album'?(<> {artist} Album</>):
+          from==='Genere'?(<> {artist} Songs</>):''}
+          </Button>
       </Group>
 
       <Collapse

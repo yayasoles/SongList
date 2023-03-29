@@ -4,11 +4,10 @@ const songSchema = new mongose.Schema({
     Title: {
       unique: true,
       type: String,
-      require: [true, "Title is required Feilds"],
+      required: [true, "Title is required Feilds"],
     },
     Album: {
       type: String,
-      default: "unkown",
       unique:true
     },
     Genere: {
@@ -16,7 +15,7 @@ const songSchema = new mongose.Schema({
   },
     Artist: {
       type:String,
-      require:true,
+      required:true,
   },
   });
   const Song = mongose.model("Song", songSchema);

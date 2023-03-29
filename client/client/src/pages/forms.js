@@ -13,12 +13,15 @@ import { IconCircleCheck, IconCircleDashed } from "@tabler/icons-react";
 import CustomBox from "./CustomBox";
 import NewForm from "./NewForm";
 
-export default function Collapsable({ IsGroupedByClicked, groupBy,songData,songdata }) {
+export default function Collapsable({ IsGroupedByClicked, groupBy,songdata,allsongs,setallsongs }) {
+  console.log(IsGroupedByClicked)
+
   // const fff=IsGroupedByClicked.split("by")
+  console.log('is clicked by : ',IsGroupedByClicked)
   if(IsGroupedByClicked===false){
     IsGroupedByClicked='New';
   }
-  // console.log('I am fucking Tired',fff[0],fff[1] ,' and length is ',fff.length)
+  // console.log('I am fucking Tired',allsongs)
   console.log('songDatasongDatasongDatasongDatasongData ',songdata)
   
   let artists = groupBy[0].map((song) => song.Artist);
@@ -30,28 +33,22 @@ export default function Collapsable({ IsGroupedByClicked, groupBy,songData,songd
 
   if (IsGroupedByClicked === "Artist") {
     const artistCollapse = artists.map((group) => (
-      <CustomBox artist={group} from="Artist" />
+      <CustomBox key={group} artist={group} from="Artist" />
     ));
     return artistCollapse;
   } else if (IsGroupedByClicked === "Album") {
-    // console.log('albumsalbumsalbumsalbumsalbumsalbums : ',albums)
     const albumCollapse = albums.map((group) => (
-      <CustomBox artist={group} from="Album" />
+      <CustomBox key={group} artist={group} from="Album" />
     ));
     return albumCollapse;
   } else if (IsGroupedByClicked === "Genere") {
-    const ffff = "" + IsGroupedByClicked;
-    console.log(
-      "GenereGenereGenereGenereGenereGenereGenere : ",
-      IsGroupedByClicked
-    );
     const genereCollapse = genere.map((group) => (
-      <CustomBox artist={group} from="Genere" />
+      <CustomBox key={group} artist={group} from="Genere" />
     ));
     return genereCollapse;
-  } else {
+  } else  {
     return (
-      <NewForm IsGroupedByClicked={IsGroupedByClicked} songdata={songData} data={songdata}/>
+      <NewForm IsGroupedByClicked={IsGroupedByClicked}  data={songdata} allsongs={allsongs} setallsongs={setallsongs}/>
     );
   }
 }

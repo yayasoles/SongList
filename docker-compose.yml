@@ -1,0 +1,97 @@
+version: '3.9'
+
+services:
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    volumes: 
+      - mongo_db:/data/db
+  api:
+    build: ./my-song-list-server
+    ports:
+      -3001:3001
+    environment:
+      - PORT: 3001
+      - MONGODB_URL: mongo_db://yayasoles:3cinvxguCpb1tb9s@cluster0.0l29e2h.mongodb.net/SongList?retryWrites=true
+      - DB_NAME: SongList
+# version: '3.9'
+
+# services:
+#   mongodb_container:
+#     image: mongo:latest
+#     restart: unless-stopped
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: root
+#       MONGO_INITDB_ROOT_PASSWORD: 3cinvxguCpb1tb9s
+#     ports:
+#       - 27017:27017
+#     volumes:
+#       - mongodb_data_container:/data/db
+#   my-song-list-server:
+#     depends_on:
+#       - mongodb_container
+#     build: ./my-song-list-server
+#     # restart: unless-stopped
+#     # env_file: env
+#     ports:
+#       - 4000:4000
+#     environment:
+#         # - NODE_ENV: developement
+#         PORT: 3000
+#         MONGODB_URL: mongodb+srv://yayasoles:3cinvxguCpb1tb9s@cluster0.0l29e2h.mongodb.net/SongList?retryWrites=true
+#         DB_NAME: SongList
+#         # - DATABASE_LOCAL=mongodb://localhost:27017/SongList
+#         DATABSE_PASSWORD: 3cinvxguCpb1tb9s
+#       # - DB_HOST=mongodb
+#       # - DB_USER=yayasoles@gmail.com
+#       # - DB_PASSWORD=3cinvxguCpb1tb9s
+#       # - DB_NAME=SongList
+#       # - DB_PORT=$MYSQLDB_PORT
+#     stdin_open: true
+#     tty: true
+
+#   client:
+#     build: ./client/client
+#     container_name: client_c
+#     ports:
+#       - 4000:4000
+#     volumes:
+#       - ./client:/app
+#       - ./client/client/node_modules
+#     stdin_open: true
+#     tty: true
+# volumes: 
+#   mongodb_data_container: {}
+# # version: '3.9'
+
+# # services:
+# #   server:
+# #     depends_on:
+# #       - mysqldb
+# #     build: ./server
+# #     restart: unless-stopped
+# #     env_file: ./.env
+# #     ports:
+# #       - $NODE_EXPOSE_PORT:$NODE_PORT
+# #     environment:
+# #       - DB_HOST=mysqldb
+# #       - DB_USER=$MYSQLDB_USER
+# #       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+# #       - DB_NAME=$MYSQLDB_DATABASE
+# #       - DB_PORT=$MYSQLDB_PORT
+# #     stdin_open: true
+# #     tty: true
+
+# #   client:
+# #     depends_on:
+# #       - server
+# #     build: ./client
+# #     restart: unless-stopped
+# #     ports:
+# #       - $CLIENT_EXPOSE_PORT:$CLIENT_PORT
+# #     stdin_open: true
+# #     tty: true
+
+# # volumes:
+# #   db:

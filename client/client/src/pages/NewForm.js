@@ -2,14 +2,16 @@ import { TextInput, Checkbox, Button, Group, Box } from "@mantine/core";
 // import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
-export default function NewForm({ IsGroupedByClicked, data }) {
-  console.log('datadatadatadatadata : ',data);
+import DeleteButton from "./Shared/DeleteButton";
+export default function NewForm({ IsGroupedByClicked,data,allsongs,setallsongs }) {
+  console.log('allsongs allsongs allsongs : ',allsongs?.length);
+  // console.log('data data data data data : ',data);
   const {
     register,
     handleSubmit,
     watch,
     resetField,
+    reset,
     setValue,
     getValues,
     formState: { errors },
@@ -24,9 +26,10 @@ export default function NewForm({ IsGroupedByClicked, data }) {
 
   }, [data]);
 const deleteHandler=(e)=>{
-  e.preventDefault()
+  // e.preventDefault()
   const id=getValues("_id")
-  fetch(`http://localhost:3001/api/v1/songs/${id}`, {
+  if(id){
+    fetch(`http://localhost:3001/api/v1/songs/${id}`, {
         method: "DELETE", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -43,11 +46,8 @@ const deleteHandler=(e)=>{
         .then((data) => {
           console.log(data.data);
         }); 
-        resetField();
-  
-      alert("Sucessfully Deleted");
-      console.log(data.data);
-
+        reset();
+  }
 }
   const onSubmit = async (data,e) => {
     console.log(
@@ -56,8 +56,8 @@ const deleteHandler=(e)=>{
     );
     if(data._id){
       const d=data._id
-      console.log('befffffooorrreee to update the ',d)
       delete data._id;
+      
       console.log('going to update the ',data)
       fetch(`http://localhost:3001/api/v1/songs/${d}`, {
         method: "PATCH", // *GET, POST, PUT, DELETE, etc.
@@ -66,8 +66,6 @@ const deleteHandler=(e)=>{
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
           "Content-Type": "application/json",
-  
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: "follow", // manual, *follow, error
         referrerPolicy: "no-referrer",
@@ -78,18 +76,18 @@ const deleteHandler=(e)=>{
           console.log(data.data);
         }); 
         resetField();
+        setallsongs()
       alert("Sucessfully Updated");
       console.log(data.data);
     }else{
-      fetch(`http://localhost:3001/api/v1/songs`, {
+      try {
+        fetch(`http://localhost:3001/api/v1/songs`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
           "Content-Type": "application/json",
-  
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: "follow", // manual, *follow, error
         referrerPolicy: "no-referrer",
@@ -97,15 +95,18 @@ const deleteHandler=(e)=>{
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.data);
+          setallsongs([...allsongs,data.data])
         });
-      resetField();
-  
-      alert("Sucessfully added");
+        reset();
+
       console.log(data.data);
+      } catch (error) {
+        
+      }
     }
    
   };
+  const onCancel=()=>console.log('cancel Cliked')
   return (
     <Box maw={300} mx="auto">
       <form onSubmit={handleSubmit(onSubmit)} preve>
@@ -141,10 +142,11 @@ const deleteHandler=(e)=>{
           label="Genere"
           {...register("Genere", { required: true })}
         />
+        
         <Group position="right" mt="md">
           {IsGroupedByClicked !== "New" ? (<>
             <Button type="submit" name="Update">Update</Button>
-            <Button  onClick={(e)=>{deleteHandler(e)}} color="red">Delete</Button>
+            <DeleteButton onconfirm={deleteHandler} oncancel={onCancel}/>
             </>
           ) : (
             <Button type="submit" name="Save">Save</Button>
