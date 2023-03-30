@@ -1,8 +1,9 @@
+const SongModel = require("../models/songModel");
 const songModel = require("../models/songModel");
 
 exports.getAllSongs = async (req, res) => {
   try {
-    const result = await songModel.find();
+    const result = await SongModel.find();
     res.status(200).json({
       status: "success",
       message: "done",

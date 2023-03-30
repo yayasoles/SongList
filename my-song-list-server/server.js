@@ -1,5 +1,6 @@
 const mongose = require("mongoose");
 const app = require("./app");
+// const SongModel = require("./models/songModel");
 
 mongose
   .connect(
@@ -14,26 +15,26 @@ mongose
     console.log("DB Connection Succesesfully");
   });
 
-const songSchema = new mongose.Schema({
-  Title: {
-    type: String,
-    require: [true, "Title is required Feilds"],
-    unique: true,
-  },
-  Album: {
-    type: String,
-    default: "unkown",
-    unique: true,
-  },
-  Genere: {
-    type: String,
-  },
-  Artist: {
-    type: String,
-    require: true,
-  },
-});
-const Song = mongose.model("Songs", songSchema);
+// const songSchema = new mongose.Schema({
+//   Title: {
+//     type: String,
+//     require: [true, "Title is required Feilds"],
+//     unique: true,
+//   },
+//   Album: {
+//     type: String,
+//     default: "unkown",
+//     unique: true,
+//   },
+//   Genere: {
+//     type: String,
+//   },
+//   Artist: {
+//     type: String,
+//     require: true,
+//   },
+// });
+// const Song = mongose.model("Songs", SongModel);
 
 
 // const kasmaseSong = new Song({

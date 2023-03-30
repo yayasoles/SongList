@@ -31,7 +31,7 @@ export default function Collapsable({ IsGroupedByClicked, groupBy,songdata,allso
   let genere = groupBy[2].map((song) => song.Genere);
   genere = [...new Set(genere)];
 
-  if (IsGroupedByClicked === "Artist") {
+  if (IsGroupedByClicked === "Artist" || Number(IsGroupedByClicked)===1) {
     const artistCollapse = artists.map((group) => (
       <CustomBox key={group} artist={group} from="Artist" />
     ));

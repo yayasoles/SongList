@@ -136,11 +136,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-// const albumCount = 4;
+const albumCount = 4;
 const links = [
-  { icon: IconBulb, label: "Artist", notifications: '0' },
-  { icon: IconCheckbox, label: "Genere", notifications: '0' },
-  { icon: IconUser, label: "Album", notifications: '0' },
+  { icon: IconBulb, label: "Artist", notifications: "0" },
+  { icon: IconCheckbox, label: "Genere", notifications: "0" },
+  { icon: IconUser, label: "Album", notifications: "0" },
 ];
 
 export default function AppShellDemo() {
@@ -150,6 +150,7 @@ export default function AppShellDemo() {
   const [allSongs, setallSongs] = useState([]);
   const groupByClicked = (event) => {
     event.preventDefault();
+    console.log("the event happend was", event.target.innerText);
     setIsGroupedByClicked(event.target.innerText);
     setsongData(1);
   };
@@ -183,7 +184,6 @@ export default function AppShellDemo() {
   // const [song, setsong] = useState();
 
   // console.log('IsGroupedByClickedIsGroupedByClickedIsGroupedByClicked',IsGroupedByClicked)
-  
 
   let AllSongs = [];
   for (let index = 0; index < allSongs?.length; index++) {
@@ -223,18 +223,20 @@ export default function AppShellDemo() {
       onClick={(event) => groupByClicked(event)}
       key={link?.Title}
       className={classes.mainLink}
-      href="google.com"
     >
+      
       <div className={classes.mainLinkInner}>
         <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
         <span>{link.label}</span>
       </div>
       {link.notifications && (
-        <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
-          {link.label === "Album" ? albums?.length : ""}
-          {link.label === "Artist" ? artists?.length : ""}
-          {link.label === "Genere" ? genere?.length : ""}
-        </Badge>
+        <label>
+          <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
+            {link.label === "Album" ? albums?.length : ""}
+            {link.label === "Artist" ? artists?.length : ""}
+            {link.label === "Genere" ? genere?.length : ""}
+          </Badge>
+        </label>
       )}
     </UnstyledButton>
   ));
@@ -311,11 +313,10 @@ export default function AppShellDemo() {
                     </ActionIcon>
                   </Tooltip>
                 </Group>
-                  
 
-                  <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
-                    {collectionLinks}
-                  </Navbar.Section>
+                <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+                  {collectionLinks}
+                </Navbar.Section>
                 {/* <div className={classes.collections}>{collectionLinks}</div> */}
               </Navbar.Section>
             </Navbar>
