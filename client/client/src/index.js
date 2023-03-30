@@ -6,9 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 // import Reducer, { AddSong } from "./redux/actions";
+// import  { configureStore } from "@reduxjs/toolkit";
+
 
 // const redux=require('redux')
-// const createStore=redux.createStore;
+// const createStore=redux.configureStore;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // const store=createStore(Reducer)
 // console.log('initial state',store.getState())
